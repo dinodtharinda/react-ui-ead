@@ -1,4 +1,4 @@
-import React from "react";
+
 import "./user.scss";
 import { DataTable } from "../../components/dataTable/DataTable";
 import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";

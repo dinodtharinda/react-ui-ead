@@ -1,5 +1,5 @@
 // AuthContext.js
-import React, { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 
 interface AuthContextType {
     authenticated: boolean;

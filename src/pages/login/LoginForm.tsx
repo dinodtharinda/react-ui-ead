@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./LoginForm.css";
 import { FaUser, FaLock } from "react-icons/fa";
 import { postData } from "../../components/API/HttpService";
@@ -18,7 +18,7 @@ export const LoginForm = () => {
           Cookies.set("user", JSON.stringify(res.data), { expires: 1 / 24 });
         }
       })
-      .then((e) => {
+      .then(() => {
         window.location.reload();
       });
   };

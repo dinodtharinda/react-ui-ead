@@ -8,7 +8,7 @@ import Menu from "./components/menu/Menu";
 import { LoginForm } from "./pages/login/LoginForm";
 import "./styles/global.scss";
 import { AuthContext } from "./components/routeManage/RouteManage";
-import React, { useContext } from "react";
+import { useContext } from "react";
 
 
 function App() {

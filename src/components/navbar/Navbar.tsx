@@ -1,5 +1,4 @@
 import "./navbar.scss";
-import { getData } from "../API/HttpService";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 
