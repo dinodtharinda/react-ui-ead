@@ -3,6 +3,8 @@ import "./LoginForm.css";
 import { FaUser, FaLock } from "react-icons/fa";
 import { postData } from "../../components/API/HttpService";
 import Cookies from "js-cookie";
+import "../../data"
+import { USER_BASE_URL } from "../../data";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -10,7 +12,7 @@ export const LoginForm = () => {
 
   const login = (e: any) => {
     e.preventDefault();
-    postData("api/v1/users/login", { email: email, password: password })
+    postData(`${USER_BASE_URL}/api/v1/users/login`, { email: email, password: password })
       .then((res: any) => {
         if (res["status"]) {
           localStorage.setItem("authenticated", true.toString());

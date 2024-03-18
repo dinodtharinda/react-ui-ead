@@ -2,11 +2,9 @@
 
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8081/invento-hub/";
-
-export const getData = async (url:string) => {
+export const getData = async (url: string) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}${url}`);
+    const response = await axios.get(`${url}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching posts: ", error);
@@ -14,21 +12,20 @@ export const getData = async (url:string) => {
   }
 };
 
-export const postData = async (url:string, requestBody :any) => {
+export const postData = async (url: string, requestBody: any) => {
   try {
     console.log(requestBody);
-    const response = await axios.post(`${API_BASE_URL}${url}`, requestBody);
+    const response = await axios.post(`${url}`, requestBody);
     return response.data;
   } catch (error) {
     console.error("Error fetching posts: ", error);
     throw error;
   }
 };
-
 
 export const putData = async (url: string, requestBody: any) => {
   try {
-    const response = await axios.put(`${API_BASE_URL}${url}`, requestBody);
+    const response = await axios.put(`${url}`, requestBody);
     return response.data;
   } catch (error) {
     console.error("Error updating data: ", error);
@@ -38,7 +35,7 @@ export const putData = async (url: string, requestBody: any) => {
 
 export const deleteData = async (url: string) => {
   try {
-    await axios.delete(`${API_BASE_URL}${url}`);
+    await axios.delete(`${url}`);
     console.log("Data deleted successfully");
   } catch (error) {
     console.error("Error deleting data: ", error);
@@ -47,3 +44,4 @@ export const deleteData = async (url: string) => {
 };
 
 //string cutomerName = SELECT c.firstName FROM Customer c  WHERE c.id=9
+

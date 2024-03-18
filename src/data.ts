@@ -1,3 +1,9 @@
+ export const USER_BASE_URL = "http://localhost:8081/invento-hub";
+ export const PRODUCT_BASE_URL = "http://localhost:8082/invento-hub";
+
+
+
+
 export const menu = [
     {
       id: 1,
