@@ -9,6 +9,10 @@ import { LoginForm } from "./pages/login/LoginForm";
 import "./styles/global.scss";
 import { AuthContext } from "./components/routeManage/RouteManage";
 import { useContext } from "react";
+import { Product } from "./pages/product/Product";
+import { User } from "./pages/user/User";
+import { NewProduct } from "./pages/product/NewProduct";
+
 
 
 function App() {
@@ -17,16 +21,17 @@ function App() {
     return (
       <div className="main">
         <Navbar />
-
         <div className="container">
           <div className="menuContainer">
             <Menu />
           </div>
           <div className="contentContainer">
-            <Outlet />
+         
+              <Outlet />
+          
           </div>
         </div>
-        <Footer />
+        <Footer  />
       </div>
     );
   };
@@ -47,12 +52,25 @@ function App() {
           element: <Home />,
         },
         {
-          path: "users",
+          path: "/users",
           element: <Users />,
         },
         {
-          path: "products",
+          path: "/products",
           element: <Products />,
+        },
+
+        {
+          path: "/users/:id",
+          element: <User />,
+        },
+        {
+          path: "/products/:id",
+          element: <Product />,
+        },
+        {
+          path: "new-product",
+          element: <NewProduct />,
         },
       ],
     },

@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./products.scss";
 import { DataTable } from "../../components/dataTable/DataTable";
-import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import { PRODUCT_BASE_URL, USER_BASE_URL } from "../../data";
+import { GridColDef } from "@mui/x-data-grid";
+import { PRODUCT_BASE_URL } from "../../data";
 import { getData } from "../../components/API/HttpService";
-
+import Button from "@mui/material/Button";
+import { Link } from "react-router-dom";
 const Products = () => {
   const [products, setProducts] = useState([]);
   const columns: GridColDef[] = [
@@ -39,11 +40,15 @@ const Products = () => {
   }, []);
 
   return (
-    <div className="users">
+    <div className="products">
       <h1>Users</h1>
+    <Link to={'/new-product'}>
 
-      <button>Add New User</button>
-      <DataTable columns={columns} rows={products} slug="users" />
+        <Button >Create New</Button>
+
+    </Link>
+   
+      <DataTable columns={columns} rows={products} slug="products" />
     </div>
   );
 };

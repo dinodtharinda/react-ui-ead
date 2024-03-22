@@ -1,4 +1,5 @@
-@import "./variable.scss";
+@import "./variables.scss";
+@import "./responsive.scss";
 
 * {
   margin: 0;
@@ -11,8 +12,6 @@ a {
   color: inherit;
 }
 
-
-
 .main {
   font-family: "Inter", sans-serif;
   background-color: $main-bg;
@@ -21,15 +20,22 @@ a {
 
 .container {
   display: flex;
+  
 }
 
 .menuContainer {
   width: 250px;
   padding: 5px 20px;
   border-right: 2px solid $soft-bg;
+
+  @include lg{
+    width: max-content;
+  }
 }
 
 .contentContainer {
   padding: 5px 20px;
   width: 100%;
+  min-height:85vh;
+ 
 }

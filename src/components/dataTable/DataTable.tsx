@@ -40,12 +40,16 @@ export const DataTable = (props: Props) => {
       );
     },
   };
+
   return (
     <div className="dataTable">
       <DataGrid
+    
         className="dataGrid"
+
         rows={props.rows}
         columns={[...props.columns, actionColumn]}
+       
         initialState={{
           pagination: {
             paginationModel: {
