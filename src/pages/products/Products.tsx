@@ -10,7 +10,15 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", sortable: true, width: 50 },
-    { field: "image", headerName: "Image", sortable: false, width: 100 },
+    {
+      field: "avatar",
+      headerName: "Avatar",
+      width: 100,
+      renderCell: (params) => {
+        return <img src={`data:image/jpeg;base64,${params.row.image}` || "/noavatar.png"} alt="" />;
+      },
+
+    },
     { field: "name", headerName: "Name", sortable: true, width: 200 },
     { field: "code", headerName: "Code", sortable: true, width: 50 },
     {
@@ -41,7 +49,7 @@ const Products = () => {
 
   return (
     <div className="products">
-      <h1>Users</h1>
+      <h1>Products</h1>
     <Link to={'/new-product'}>
 
         <Button >Create New</Button>

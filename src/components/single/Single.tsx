@@ -3,6 +3,7 @@ import "./single.scss";
 import { PRODUCT_BASE_URL } from "../../data";
 import { getData ,postData, putData } from "../API/HttpService";
 import { IconButton, Snackbar } from "@mui/material";
+import Base64ToImageConverter from "../utills/BaseToImage";
 
 type Props = {
   id: string;
@@ -24,6 +25,10 @@ export const Single = (props: Props) => {
     created_at: "",
     updated_at: "",
   });
+
+
+
+
   const [editingProduct, setEditingProduct] = useState({ ...product });
   const [snackbarMessage, setSnackbarMessage] = useState("");
   useEffect(() => {
@@ -32,6 +37,8 @@ export const Single = (props: Props) => {
         if (res.status) {
           setProduct(res.data);
           setEditingProduct(res.data);
+       
+
         }else{
           console.log(res.message)
         }
@@ -135,9 +142,9 @@ export const Single = (props: Props) => {
           </div>
         </div>
         <div className="image">
-          
+        
           <img
-            src="https://th.bing.com/th/id/R.0b2efd0aa3315896159296f71a491a8b?rik=RMbXAU93bG4rtg&pid=ImgRaw&r=0"
+            src={`data:image/jpeg;base64,${product.image}`}
             alt=""
           />
         </div>

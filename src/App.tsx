@@ -12,6 +12,7 @@ import { useContext } from "react";
 import { Product } from "./pages/product/Product";
 import { User } from "./pages/user/User";
 import { NewProduct } from "./pages/product/NewProduct";
+import { Customers } from "./pages/customers/Customers";
 
 
 
@@ -67,6 +68,10 @@ function App() {
         {
           path: "/products/:id",
           element: <Product />,
+        },
+        {
+          path: "/customers",
+          element: <Customers />,
         },
         {
           path: "new-product",

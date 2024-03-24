@@ -27,12 +27,12 @@ export const menu = [
       id: 2,
       title: "lists",
       listItems: [
-        {
-          id: 1,
-          title: "Users",
-          url: "/users",
-          icon: "user.svg",
-        },
+        // {
+        //   id: 1,
+        //   title: "Users",
+        //   url: "/users",
+        //   icon: "user.svg",
+        // },
         {
           id: 2,
           title: "Products",
@@ -44,6 +44,12 @@ export const menu = [
           title: "Orders",
           url: "/orders",
           icon: "order.svg",
+        },
+        {
+          id: 3,
+          title: "Customer",
+          url: "/customers",
+          icon: "user.svg",
         },
         // {
         //   id: 4,
