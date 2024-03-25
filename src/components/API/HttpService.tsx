@@ -23,6 +23,29 @@ export const postData = async (url: string, requestBody: any) => {
   }
 };
 
+
+export const postFormData = async (url: string, requestBody: any) => {
+  try {
+    const formData = new FormData();
+
+    // Iterate over the requestBody object and append each key-value pair to the formData
+    for (const key in requestBody) {
+      formData.append(key, requestBody[key]);
+    }
+
+    const response = await axios.post(url, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // Set the content type to multipart/form-data
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error posting data: ", error);
+    throw error;
+  }
+};
+
 export const putData = async (url: string, requestBody: any) => {
   try {
     const response = await axios.put(`${url}`, requestBody);

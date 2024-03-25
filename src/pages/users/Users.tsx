@@ -56,15 +56,7 @@ const columns: GridColDef[] = [
 const Users = () => {
   const [open, setOpen] = useState(false);
 
-  // TEST THE API
 
-  // const { isLoading, data } = useQuery({
-  //   queryKey: ["allusers"],
-  //   queryFn: () =>
-  //     fetch("http://localhost:8800/api/users").then(
-  //       (res) => res.json()
-  //     ),
-  // });
 
   return (
     <div className="users">
@@ -72,7 +64,7 @@ const Users = () => {
         <h1>Users</h1>
         <button onClick={() => setOpen(true)}>Add New User</button>
       </div>
-      <DataTable slug="users" columns={columns} rows={userRows} />
+      <DataTable isLoading={false} slug="users" columns={columns} rows={userRows} />
       {/* TEST THE API */}
 
       {/* {isLoading ? (

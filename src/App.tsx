@@ -13,6 +13,7 @@ import { Product } from "./pages/product/Product";
 import { User } from "./pages/user/User";
 import { NewProduct } from "./pages/product/NewProduct";
 import { Customers } from "./pages/customers/Customers";
+import Categorys from "./pages/categories/Categorys";
 
 
 
@@ -76,6 +77,10 @@ function App() {
         {
           path: "new-product",
           element: <NewProduct />,
+        },
+        {
+          path: "categorys",
+          element: <Categorys />,
         },
       ],
     },

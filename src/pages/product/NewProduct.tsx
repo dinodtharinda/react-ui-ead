@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import "./newProduct.scss";
-import { PRODUCT_BASE_URL } from "../../data";
-import { getData ,postData, putData } from "../../components/API/HttpService";
-import { IconButton, Snackbar } from "@mui/material";
 
+import { IconButton, Snackbar } from "@mui/material";
+import { PRODUCT_BASE_URL } from "../../data";
+import {
+  getData,
+  postData,
+  postFormData,
+} from "../../components/API/HttpService";
 
 export const NewProduct = () => {
   const [product, setProduct] = useState({
@@ -13,39 +17,53 @@ export const NewProduct = () => {
     category_id: "",
     price: "",
     cost: "",
-    qty: null,
+    qty: "",
     alert_quantity: "",
     image: "",
     description: "",
-    is_active: false,
+    is_active: true,
     created_at: "",
     updated_at: "",
   });
+
   const [editingProduct, setEditingProduct] = useState({ ...product });
+  const [categories, setCategories] = useState([{ id: "", name: "name" }]);
+
   const [snackbarMessage, setSnackbarMessage] = useState("");
-
-  const toggleActive=()=>{
-    product.is_active = !product.is_active
-  }
-
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setEditingProduct({ ...editingProduct, [name]: value });
   };
 
+  useEffect(() => {
+    getData(`${PRODUCT_BASE_URL}/api/v1/categories`).then((res: any) => {
+      if (res.status) {
+        setCategories(res.data);
+      } else {
+        console.log(res.message);
+      }
+    });
+  }, []);
   const handleUpdateProduct = () => {
-    // putData(`${PRODUCT_BASE_URL}/api/v1/products`, editingProduct)
-    //   .then((res: any) => {
-    //     if (res["status"]) {
-    //       setSnackbarMessage("Product updated successfully.");
-    //     }
-    //   })
-    //   .catch((error: any) => {
-    //     setSnackbarMessage("Failed to update product. Please try again.");
-    //   });
-    console.log(editingProduct)
-    console.log("Created new Product")
+    postData(`${PRODUCT_BASE_URL}/api/v1/products`, editingProduct)
+      .then((res: any) => {
+        if (res.status) {
+          setSnackbarMessage("Product updated successfully.");
+        }
+        console.log(res.message);
+      })
+      .catch((error: any) => {
+        setSnackbarMessage(
+          `Failed to update product. Please try again. ${error}`
+        );
+      });
+  };
+  const handleCategoriesOption = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setEditingProduct({ ...editingProduct, [name]: value });
   };
   const handleCloseSnackbar = () => {
     setSnackbarMessage("");
@@ -74,18 +92,25 @@ export const NewProduct = () => {
               />
             </div>
             <div className="item">
-              <span className="itemTitle">Category ID:</span>
-              <input
-                type="text"
+              <span className="itemTitle">Category:</span>
+              <select
                 name="category_id"
                 value={editingProduct.category_id}
-                onChange={handleInputChange}
-              />
+                onChange={handleCategoriesOption}
+              >
+                <option value="">Select Category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
             </div>
+
             <div className="item">
               <span className="itemTitle">Price:</span>
               <input
-                type="text"
+                type="number"
                 name="price"
                 value={editingProduct.price}
                 onChange={handleInputChange}
@@ -94,7 +119,7 @@ export const NewProduct = () => {
             <div className="item">
               <span className="itemTitle">Cost:</span>
               <input
-                type="text"
+                type="number"
                 name="cost"
                 value={editingProduct.cost}
                 onChange={handleInputChange}
@@ -103,7 +128,7 @@ export const NewProduct = () => {
             <div className="item">
               <span className="itemTitle">Alert Quantity:</span>
               <input
-                type="text"
+                type="number"
                 name="alert_quantity"
                 value={editingProduct.alert_quantity}
                 onChange={handleInputChange}
@@ -118,48 +143,22 @@ export const NewProduct = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="item">
-              <span className="itemTitle">Is Active:</span>
-              <input
-                type="checkbox"
-                name="is_active"
-                checked={editingProduct.is_active}
-                onChange={toggleActive}
-                onClick={toggleActive}
-              />
-            </div>
-            <div className="item">
-              <span className="itemTitle">Created At:</span>
-              <input
-                type="text"
-                name="created_at"
-                value={editingProduct.created_at}
-                readOnly
-              />
-            </div>
-            <div className="item">
-              <span className="itemTitle">Updated At:</span>
-              <input
-                type="text"
-                name="updated_at"
-                value={editingProduct.updated_at}
-                readOnly
-              />
-            </div>
           </div>
           <div className="bottomInfo">
             <button className="updateButton" onClick={handleUpdateProduct}>
-              Update
+              Save Product
             </button>
           </div>
         </div>
-        <div className="image">
-          
+        {/* <div className="image">
           <img
-            src="https://th.bing.com/th/id/R.0b2efd0aa3315896159296f71a491a8b?rik=RMbXAU93bG4rtg&pid=ImgRaw&r=0"
+            src={
+              editingProduct.image ??
+              "https://th.bing.com/th/id/OIP.gV1cXI_SNBK_nU1yrE_hcwHaGp?rs=1&pid=ImgDetMain"
+            }
             alt=""
           />
-        </div>
+        </div> */}
       </div>
       <Snackbar
         anchorOrigin={{

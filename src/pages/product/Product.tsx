@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import "./product.scss";
 
 import { useParams } from "react-router-dom";
@@ -26,10 +26,15 @@ export const Product = () => {
 
 
 
-
+  const [categories, setCategories] = useState([{id:"",name:"name"}]);
   const [editingProduct, setEditingProduct] = useState({ ...product });
   const [snackbarMessage, setSnackbarMessage] = useState("");
   useEffect(() => {
+   getCategories()
+   getProductDetails()
+  }, []);
+
+  const getProductDetails = () =>{
     getData(`${PRODUCT_BASE_URL}/api/v1/products/${id}`).then(
       (res: any) => {
         if (res.status) {
@@ -42,8 +47,26 @@ export const Product = () => {
         }
       }
     );
-  }, []);
+  }
 
+
+  const getCategories = ()=>{
+    getData(`${PRODUCT_BASE_URL}/api/v1/categories`).then(
+      (res: any) => {
+        if (res.status) {
+          setCategories(res.data)
+        }else{
+          console.log(res.message)
+        }
+      }
+    );
+  }
+  const handleCategoriesOption = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+   const { name, value } = e.target;
+    setEditingProduct({ ...editingProduct, [name]: value });
+  };
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setEditingProduct({ ...editingProduct, [name]: value });
@@ -58,7 +81,7 @@ export const Product = () => {
         console.log(res.message)
       })
       .catch((error: any) => {
-        setSnackbarMessage("Failed to update product. Please try again.");
+        setSnackbarMessage(`Failed to update product. Please try again. ${error}`);
       });
   };
   const handleCloseSnackbar = () => {
@@ -88,18 +111,24 @@ export const Product = () => {
               />
             </div>
             <div className="item">
-              <span className="itemTitle">Category ID:</span>
-              <input
-                type="text"
+              <span className="itemTitle">Category:</span>
+              <select
                 name="category_id"
                 value={editingProduct.category_id}
-                onChange={handleInputChange}
-              />
+                onChange={handleCategoriesOption}
+              >
+                <option value="">Select Category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="item">
               <span className="itemTitle">Price:</span>
               <input
-                type="text"
+                type="number"
                 name="price"
                 value={editingProduct.price}
                 onChange={handleInputChange}
@@ -108,7 +137,7 @@ export const Product = () => {
             <div className="item">
               <span className="itemTitle">Cost:</span>
               <input
-                type="text"
+                type="number"
                 name="cost"
                 value={editingProduct.cost}
                 onChange={handleInputChange}
@@ -117,7 +146,7 @@ export const Product = () => {
             <div className="item">
               <span className="itemTitle">Alert Quantity:</span>
               <input
-                type="text"
+                type="number"
                 name="alert_quantity"
                 value={editingProduct.alert_quantity}
                 onChange={handleInputChange}
@@ -139,13 +168,13 @@ export const Product = () => {
             </button>
           </div>
         </div>
-        <div className="image">
+        {/* <div className="image">
         
           <img
             src={`data:image/jpeg;base64,${product.image}`}
             alt=""
           />
-        </div>
+        </div> */}
       </div>
       <Snackbar
         anchorOrigin={{

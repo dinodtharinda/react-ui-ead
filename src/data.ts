@@ -51,6 +51,12 @@ export const menu = [
           url: "/customers",
           icon: "user.svg",
         },
+        {
+          id: 3,
+          title: "Category",
+          url: "/categorys",
+          icon: "note.svg",
+        },
         // {
         //   id: 4,
         //   title: "Posts",
