@@ -12,14 +12,12 @@ const Categorys = () => {
   const [isLoading, setIsLoading] = useState(true);
   const actionColumn: GridColDef = {
     field: "action",
-    headerName: "Actions",
+    headerName: "Delete",
     width: 70,
     renderCell: (param) => {
       return (
         <div className="action">
-          <Link to={`/categories/${param.row.id}`}>
-            <img src="/view.svg" alt="" />
-          </Link>
+         
         <div className="delete" onClick={()=>handleDelete(param.row.id)}>
           <img src="/delete.svg" alt="" />
         </div>
@@ -55,7 +53,7 @@ const Categorys = () => {
   return (
     <div className="products">
       <h1>Categories</h1>
-      <Link to={"/new-product"}>
+      <Link to={"/new-categories"}>
         <Button>Create New Category</Button>
       </Link>
 

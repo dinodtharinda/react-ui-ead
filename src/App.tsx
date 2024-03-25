@@ -14,6 +14,7 @@ import { User } from "./pages/user/User";
 import { NewProduct } from "./pages/product/NewProduct";
 import { Customers } from "./pages/customers/Customers";
 import Categorys from "./pages/categories/Categorys";
+import { NewCategory } from "./pages/categories/NewCategory";
 
 
 
@@ -81,6 +82,9 @@ function App() {
         {
           path: "categorys",
           element: <Categorys />,
+        }, {
+          path: "new-categories",
+          element: <NewCategory />,
         },
       ],
     },

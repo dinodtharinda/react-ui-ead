@@ -45,7 +45,7 @@ export const NewProduct = () => {
       }
     });
   }, []);
-  const handleUpdateProduct = () => {
+  const handleInsertProduct = () => {
     postData(`${PRODUCT_BASE_URL}/api/v1/products`, editingProduct)
       .then((res: any) => {
         if (res.status) {
@@ -145,7 +145,7 @@ export const NewProduct = () => {
             </div>
           </div>
           <div className="bottomInfo">
-            <button className="updateButton" onClick={handleUpdateProduct}>
+            <button className="updateButton" onClick={handleInsertProduct}>
               Save Product
             </button>
           </div>
