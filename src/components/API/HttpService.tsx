@@ -58,8 +58,9 @@ export const putData = async (url: string, requestBody: any) => {
 
 export const deleteData = async (url: string) => {
   try {
-    await axios.delete(`${url}`);
+    const response = await axios.delete(`${url}`);
     console.log("Data deleted successfully");
+    return response;
   } catch (error) {
     console.error("Error deleting data: ", error);
     throw error;

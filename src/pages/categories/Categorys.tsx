@@ -3,9 +3,11 @@ import "./categorys.scss";
 import { DataTable } from "../../components/dataTable/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
 import { PRODUCT_BASE_URL } from "../../data";
-import { getData } from "../../components/API/HttpService";
+import { deleteData, getData } from "../../components/API/HttpService";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
+import { IconButton, Snackbar } from "@mui/material";
+import React from "react";
 
 const Categorys = () => {
   const [products, setProducts] = useState([]);
@@ -26,19 +28,33 @@ const Categorys = () => {
       );
     },
   };
-
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const handleDelete = (id:number)=>{
-    //delete item
-    console.log(id + "Has been deleted!")
+    console.log(id)
+    deleteData(`${PRODUCT_BASE_URL}/api/v1/categories/${id}`).then((res: any) => {
+      // setIsLoading(true)
+      console.log(res)
+      if (res.status) {
+        setSnackbarMessage(
+          `Category Deleted!`
+        );
+        getAllCategories()
+      }else{
+        setSnackbarMessage(
+          `Deletion Failed!`
+        );
+      }
+      setIsLoading(false);
+    });
   }
   const columns: GridColDef[] = [
     { field: "name", headerName: "Name", sortable: true, width: 200 },
     { field: "is_active", headerName: "Is Active", sortable: true, width: 100 },
     actionColumn
   ];
-  useEffect(() => {
-    console.log("Start")
-    getData(`${PRODUCT_BASE_URL}/api/v1/categories`).then((res: any) => {
+
+  const getAllCategories = ()=> {
+     getData(`${PRODUCT_BASE_URL}/api/v1/categories`).then((res: any) => {
       if (res.status) {
         setProducts(res.data);
         console.log("Done");
@@ -48,8 +64,14 @@ const Categorys = () => {
       }
       setIsLoading(false);
     });
+  }
+  useEffect(() => {
+    getAllCategories()
+   
   }, []);
-
+  const handleCloseSnackbar = () => {
+    setSnackbarMessage("");
+  };
   return (
     <div className="products">
       <h1>Categories</h1>
@@ -62,6 +84,28 @@ const Categorys = () => {
         rows={products}
         isLoading={isLoading}
         slug="categories"
+      />
+       <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={!!snackbarMessage}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message={snackbarMessage}
+        action={
+          <React.Fragment>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleCloseSnackbar}
+            >
+              {/* <CloseIcon fontSize="small" /> */}
+            </IconButton>
+          </React.Fragment>
+        }
       />
     </div>
   );

@@ -46,18 +46,24 @@ export const NewProduct = () => {
     });
   }, []);
   const handleInsertProduct = () => {
+    console.log("Start insertion")
     postData(`${PRODUCT_BASE_URL}/api/v1/products`, editingProduct)
       .then((res: any) => {
         if (res.status) {
           setSnackbarMessage("Product updated successfully.");
+        }else{
+           setSnackbarMessage(res.message);
         }
-        console.log(res.message);
+       
+     
+        console.log("Done insertion")
       })
       .catch((error: any) => {
         setSnackbarMessage(
           `Failed to update product. Please try again. ${error}`
         );
       });
+      console.log("End insertion")
   };
   const handleCategoriesOption = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>

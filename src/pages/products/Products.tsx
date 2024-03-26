@@ -3,10 +3,11 @@ import "./products.scss";
 import { DataTable } from "../../components/dataTable/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
 import { PRODUCT_BASE_URL } from "../../data";
-import { getData } from "../../components/API/HttpService";
+import { deleteData, getData } from "../../components/API/HttpService";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, IconButton, Snackbar } from "@mui/material";
+import React from "react";
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,10 +29,24 @@ const Products = () => {
       );
     },
   };
-
+  const [snackbarMessage, setSnackbarMessage] = useState("");
   const handleDelete = (id:number)=>{
-    //delete item
-    console.log(id + "Has been deleted!")
+    console.log(id)
+    deleteData(`${PRODUCT_BASE_URL}/api/v1/products/${id}`).then((res: any) => {
+      // setIsLoading(true)
+      console.log(res)
+      if (res.status) {
+        setSnackbarMessage(
+          `Proudct Deleted!`
+        );
+        getAllProducts()
+      }else{
+        setSnackbarMessage(
+          `Deletion Failed!`
+        );
+      }
+      setIsLoading(false);
+    });
   }
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", sortable: true, width: 50 },
@@ -73,17 +88,21 @@ const Products = () => {
   ];
 
 
-
- 
-  useEffect(() => {
-    getData(`${PRODUCT_BASE_URL}/api/v1/products`).then((res: any) => {
+const getAllProducts = () => {
+   getData(`${PRODUCT_BASE_URL}/api/v1/products`).then((res: any) => {
       if (res["status"]) {
         setProducts(res.data);
       }
       setIsLoading(false);
     });
+}
+ 
+  useEffect(() => {
+   getAllProducts()
   }, []);
-
+  const handleCloseSnackbar = () => {
+    setSnackbarMessage("");
+  };
   return (
     <div className="products">
       <h1>Products</h1>
@@ -97,8 +116,32 @@ const Products = () => {
         isLoading={isLoading}
         slug="products"
       />
+       <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={!!snackbarMessage}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message={snackbarMessage}
+        action={
+          <React.Fragment>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleCloseSnackbar}
+            >
+              {/* <CloseIcon fontSize="small" /> */}
+            </IconButton>
+          </React.Fragment>
+        }
+      />
     </div>
   );
 };
 
 export default Products;
+
+
