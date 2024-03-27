@@ -87,6 +87,33 @@ export const Product = () => {
   const handleCloseSnackbar = () => {
     setSnackbarMessage("");
   };
+  const handleImageChange = (event:any) => {
+    const selectedImage = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      setEditingProduct({
+        ...editingProduct,
+        image: arrayBufferToBase64(reader.result as ArrayBuffer), // Set the image to the base64 encoded string
+      });
+    };
+
+    if (selectedImage) {
+      reader.readAsArrayBuffer(selectedImage); // Convert the image to base64
+    }
+  };
+  function arrayBufferToBase64(buffer: ArrayBuffer): string {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    console.log("done convert")
+    console.log(binary)
+
+    return btoa(binary);
+  }
   return (
     <div className="single">
       <div className="view">
@@ -168,13 +195,21 @@ export const Product = () => {
             </button>
           </div>
         </div>
-        {/* <div className="image">
-        
-          <img
-            src={`data:image/jpeg;base64,${product.image}`}
-            alt=""
-          />
-        </div> */}
+        <div>
+          {/* Input element for choosing image */}
+          <input type="file" onChange={handleImageChange} />
+
+          {/* Render the image */}
+         
+          <div className="image">
+            <img
+              src={
+                editingProduct.image ?  `data:image/png;base64,${editingProduct.image}` :"https://th.bing.com/th/id/OIP.gV1cXI_SNBK_nU1yrE_hcwHaGp?rs=1&pid=ImgDetMain"
+              }
+              alt=""
+            />
+          </div>
+        </div>
       </div>
       <Snackbar
         anchorOrigin={{

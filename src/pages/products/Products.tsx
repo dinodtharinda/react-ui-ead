@@ -50,21 +50,21 @@ const Products = () => {
   }
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", sortable: true, width: 50 },
-    // {
-    //   field: "avatar",
-    //   headerName: "Avatar",
-    //   width: 100,
-    //   renderCell: (params) => {
-    //     return (
-    //       <img
-    //         src={
-    //           `data:image/jpeg;base64,${params.row.image}` || "/noavatar.png"
-    //         }
-    //         alt=""
-    //       />
-    //     );
-    //   },
-    // },
+    {
+      field: "avatar",
+      headerName: "Avatar",
+      width: 100,
+      renderCell: (params) => {
+        return (
+          <img
+            src={
+              `data:image/jpeg;base64,${params.row.image}` || "/noavatar.png"
+            }
+            alt=""
+          />
+        );
+      },
+    },
     { field: "name", headerName: "Name", sortable: true, width: 200 },
     { field: "code", headerName: "Code", sortable: true, width: 50 },
     {
