@@ -15,8 +15,11 @@ import { NewProduct } from "./pages/product/NewProduct";
 import { Customers } from "./pages/customers/Customers";
 import Categorys from "./pages/categories/Categorys";
 import { NewCategory } from "./pages/categories/NewCategory";
-import { Customer } from "./pages/customer/customer";
+
 import { NewCustomer } from "./pages/customer/NewCustomer";
+import { Orders } from "./pages/orders/Orders";
+import { Customer } from "./pages/customer/Customer";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 
@@ -26,7 +29,7 @@ function App() {
     return (
       <div className="main">
         <Navbar />
-        <div className="container">
+        <div className="content">
           <div className="menuContainer">
             <Menu />
           </div>
@@ -78,14 +81,14 @@ function App() {
           element: <Customers />,
         },
         {
-          path: "new-product",
+          path: "/new-product",
           element: <NewProduct />,
         },
         {
-          path: "categorys",
+          path: "/categorys",
           element: <Categorys />,
         }, {
-          path: "new-categories",
+          path: "/new-categories",
           element: <NewCategory />,
         },
         {
@@ -95,6 +98,10 @@ function App() {
         {
           path: "/new-customers",
           element: <NewCustomer />,
+        },
+        {
+          path: "/orders",
+          element: <Orders />,
         },
       ],
     },

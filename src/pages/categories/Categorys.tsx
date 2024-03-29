@@ -49,7 +49,6 @@ const Categorys = () => {
   }
   const columns: GridColDef[] = [
     { field: "name", headerName: "Name", sortable: true, width: 200 },
-    { field: "is_active", headerName: "Is Active", sortable: true, width: 100 },
     actionColumn
   ];
 
@@ -73,41 +72,61 @@ const Categorys = () => {
     setSnackbarMessage("");
   };
   return (
-    <div className="products">
-      <h1>Categories</h1>
-      <Link to={"/new-categories"}>
-        <Button>Create New Category</Button>
-      </Link>
-
-      <DataTable
-        columns={columns}
-        rows={products}
-        isLoading={isLoading}
-        slug="categories"
-      />
-       <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        open={!!snackbarMessage}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-        message={snackbarMessage}
-        action={
-          <React.Fragment>
-            <IconButton
-              size="small"
-              aria-label="close"
-              color="inherit"
-              onClick={handleCloseSnackbar}
-            >
-              {/* <CloseIcon fontSize="small" /> */}
-            </IconButton>
-          </React.Fragment>
-        }
-      />
+    <div className="col-md-12">
+      <h1>
+        <img src="/categories.png" alt="" />
+        Categories
+      </h1>
+      <div className="card">
+        <div className="card-header">
+          <h2 className="card-title">Add New Category</h2>
+        </div>
+        <div className="card-body">
+          <div className="col-md-6">
+            <span className="itemTitle">Category Name:</span>
+            <input
+            className="form-control"
+              type="text"
+              name="name"
+            />
+          </div>
+          <Link to={"/new-categories"}>
+            <button className="btn btn-primary my-2">Submit</button>
+          </Link>
+        </div>
+      </div>
+      <div className="products mt-4">
+        <DataTable
+          columns={columns}
+          rows={products}
+          isLoading={isLoading}
+          slug="categories"
+        />
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          open={!!snackbarMessage}
+          autoHideDuration={6000}
+          onClose={handleCloseSnackbar}
+          message={snackbarMessage}
+          action={
+            <React.Fragment>
+              <IconButton
+                size="small"
+                aria-label="close"
+                color="inherit"
+                onClick={handleCloseSnackbar}
+              >
+                {/* <CloseIcon fontSize="small" /> */}
+              </IconButton>
+            </React.Fragment>
+          }
+        />
+      </div>
     </div>
+    
   );
 };
 

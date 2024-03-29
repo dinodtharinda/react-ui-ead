@@ -28,31 +28,30 @@ export const Customers = () => {
     },
   };
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 90 },
    
   
     {
       field: "f_name",
       headerName: "First name",
-      width: 150,
+      width: 250,
       editable: true,
     },
     {
       field: "l_name",
       headerName: "Last name",
-      width: 150,
+      width: 250,
       editable: true,
     },
     {
       field: "phone_number",
       headerName: "Phone",
-      width: 150,
+      width: 250,
       editable: true,
     },
     {
       field: "email",
       headerName: "Email",
-      width: 150,
+      width: 250,
       editable: true,
     },
 
@@ -90,12 +89,13 @@ export const Customers = () => {
  }
   return (
     <div className="users">
-      <div className="info">
-        <h1>Users</h1>
+        <h1>
+          <img src="/customers.png" alt="" />
+          Customers
+          </h1>
         <Link to={"/new-customers"}>
-        <Button>Create New Customer</Button>
+        <button className="btn btn-primary my-2">Add New Customer</button>
       </Link>
-      </div>
       <DataTable isLoading={false} slug="users" columns={columns} rows={customers} />
       {/* TEST THE API */}
 

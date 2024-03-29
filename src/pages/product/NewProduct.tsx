@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import "./newProduct.scss";
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { IconButton, Snackbar } from "@mui/material";
 import { PRODUCT_BASE_URL } from "../../data";
@@ -101,32 +102,42 @@ export const NewProduct = () => {
 
     return btoa(binary);
   }
+  function handleTextAreaChange(event: ChangeEvent<HTMLTextAreaElement>): void {
+    throw new Error("Function not implemented.");
+  }
+
   return (
-    <div className="single">
-      <div className="view">
-        <div className="info">
-          <div className="details">
-            <div className="item">
+    <div className="col-md-12">
+      <div className="card">
+        <div className="card-header">
+          <h2 className="card-title">Add New Product</h2>
+        </div>
+        <div className="card-body">
+          <div className="row">
+            <div className="col-md-6 form-group my-2">
               <span className="itemTitle">Name:</span>
               <input
+                 className="form-control"
                 type="text"
                 name="name"
                 value={editingProduct.name}
                 onChange={handleInputChange}
               />
             </div>
-            <div className="item">
+            <div className="col-md-6 form-group my-2">
               <span className="itemTitle">Code:</span>
               <input
                 type="text"
                 name="code"
+                className="form-control"
                 value={editingProduct.code}
                 onChange={handleInputChange}
               />
             </div>
-            <div className="item">
+            <div className="col-md-6 form-group my-2">
               <span className="itemTitle">Category:</span>
               <select
+                 className="form-control"
                 name="category_id"
                 value={editingProduct.category_id}
                 onChange={handleCategoriesOption}
@@ -140,62 +151,76 @@ export const NewProduct = () => {
               </select>
             </div>
 
-            <div className="item">
+            <div className="col-md-6 form-group my-2">
               <span className="itemTitle">Price:</span>
               <input
+              
                 type="number"
                 name="price"
+                className="form-control"
                 value={editingProduct.price}
                 onChange={handleInputChange}
               />
             </div>
-            <div className="item">
+            <div className="col-md-6 form-group my-2">
               <span className="itemTitle">Cost:</span>
               <input
+                 className="form-control"
                 type="number"
                 name="cost"
                 value={editingProduct.cost}
                 onChange={handleInputChange}
               />
             </div>
-            <div className="item">
+            <div className="col-md-6 form-group my-2">
+              <span className="itemTitle">Quantity:</span>
+              <input
+                 className="form-control"
+                type="number"
+                name="qty"
+                value={editingProduct.qty}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="col-md-6 form-group my-2">
               <span className="itemTitle">Alert Quantity:</span>
               <input
+                 className="form-control"
                 type="number"
                 name="alert_quantity"
                 value={editingProduct.alert_quantity}
                 onChange={handleInputChange}
               />
             </div>
-            <div className="item">
+            <div className="col-md-12 form-group my-2">
               <span className="itemTitle">Description:</span>
-              <input
-                type="text"
+              <textarea
+                className="form-control"
                 name="description"
                 value={editingProduct.description}
-                onChange={handleInputChange}
+                onChange={handleTextAreaChange}
               />
             </div>
-          </div>
-          <div className="bottomInfo">
-            <button className="updateButton" onClick={handleInsertProduct}>
-              Save Product
-            </button>
-          </div>
-        </div>
-        <div>
-          {/* Input element for choosing image */}
-          <input type="file" onChange={handleImageChange} />
+            <div className="col-md-6 form-group mt-3">
+              <label className="itemTitle">Image:</label>
+              <input type="file" className="form-control"  onChange={handleImageChange} />
 
-          {/* Render the image */}
-         
-          <div className="image">
-            <img
-              src={
-                editingProduct.image ?  `data:image/png;base64,${editingProduct.image}` :"https://th.bing.com/th/id/OIP.gV1cXI_SNBK_nU1yrE_hcwHaGp?rs=1&pid=ImgDetMain"
-              }
-              alt=""
-            />
+              {/* Render the image */}
+            
+              <div className="image">
+                <img style={{"width":"315px","height":"auto","objectFit":"contain"}}
+                  src={
+                    editingProduct.image ?  `data:image/png;base64,${editingProduct.image}` :"https://th.bing.com/th/id/OIP.gV1cXI_SNBK_nU1yrE_hcwHaGp?rs=1&pid=ImgDetMain"
+                  }
+                  alt=""
+                />
+              </div>
+            </div>
+            <div className="bottomInfo">
+              <button className="updateButton btn btn-primary mt-3 w-25" onClick={handleInsertProduct}>
+                Submit
+              </button>
+            </div>
           </div>
         </div>
       </div>

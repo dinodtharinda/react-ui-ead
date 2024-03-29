@@ -1,10 +1,13 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import "./product.scss";
+// import "./product.scss";*
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { useParams } from "react-router-dom";
-import { IconButton, Snackbar } from "@mui/material";
+// import { IconButton, Snackbar } from "@mui/material";
 import { PRODUCT_BASE_URL } from "../../data";
 import { getData, putData } from "../../components/API/HttpService";
+import IconButton from "@mui/material/IconButton";
+import Snackbar from "@mui/material/Snackbar";
 
 export const Product = () => {
   const { id } = useParams<{ id: string }>();
@@ -72,6 +75,12 @@ export const Product = () => {
     setEditingProduct({ ...editingProduct, [name]: value });
   };
 
+
+  const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setEditingProduct({ ...editingProduct, [name]: value });
+  };
+
   const handleUpdateProduct = () => {
     putData(`${PRODUCT_BASE_URL}/api/v1/products/${id}`, editingProduct)
       .then((res: any) => {
@@ -115,31 +124,37 @@ export const Product = () => {
     return btoa(binary);
   }
   return (
-    <div className="single">
-      <div className="view">
-        <div className="info">
-          <div className="details">
-            <div className="item">
-              <span className="itemTitle">Name:</span>
+    <div className="col-md-12">
+      <div className="card">
+        <div className="card-header">
+          <h2 className="card-title">Update Product</h2>
+        </div>
+        <div className="card-body">
+          <div className="row">
+            <div className="col-md-6 form-group my-2">
+              <label className="itemTitle">Name:</label>
               <input
+                className="form-control"
                 type="text"
                 name="name"
                 value={editingProduct.name}
                 onChange={handleInputChange}
               />
             </div>
-            <div className="item">
-              <span className="itemTitle">Code:</span>
+            <div className="col-md-6 form-group my-2">
+              <label className="itemTitle">Code:</label>
               <input
+                className="form-control"
                 type="text"
                 name="code"
                 value={editingProduct.code}
                 onChange={handleInputChange}
               />
             </div>
-            <div className="item">
-              <span className="itemTitle">Category:</span>
+            <div className="col-md-6 form-group my-2">
+              <label className="itemTitle">Category:</label>
               <select
+                className="form-control"
                 name="category_id"
                 value={editingProduct.category_id}
                 onChange={handleCategoriesOption}
@@ -152,64 +167,80 @@ export const Product = () => {
                 ))}
               </select>
             </div>
-            <div className="item">
-              <span className="itemTitle">Price:</span>
+            <div className="col-md-6 form-group my-2">
+              <label className="itemTitle">Price:</label>
               <input
+                className="form-control"
                 type="number"
                 name="price"
                 value={editingProduct.price}
                 onChange={handleInputChange}
               />
             </div>
-            <div className="item">
-              <span className="itemTitle">Cost:</span>
+            <div className="col-md-6 form-group my-2">
+              <label className="itemTitle">Cost:</label>
               <input
+                className="form-control"
                 type="number"
                 name="cost"
                 value={editingProduct.cost}
                 onChange={handleInputChange}
               />
             </div>
-            <div className="item">
-              <span className="itemTitle">Alert Quantity:</span>
+            <div className="col-md-6 form-group my-2">
+              <label className="itemTitle">Quantity:</label>
               <input
+                className="form-control"
+                type="number"
+                name="qty"
+                value={editingProduct.qty}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="col-md-6 form-group my-2">
+              <label className="itemTitle">Alert Quantity:</label>
+              <input
+                className="form-control"
                 type="number"
                 name="alert_quantity"
                 value={editingProduct.alert_quantity}
                 onChange={handleInputChange}
               />
             </div>
-            <div className="item">
-              <span className="itemTitle">Description:</span>
-              <input
-                type="text"
+            <div className="col-md-6 form-group my-2">
+              <label className="itemTitle">Description:</label>
+              <textarea
+                className="form-control"
                 name="description"
                 value={editingProduct.description}
-                onChange={handleInputChange}
+                onChange={handleTextAreaChange}
               />
             </div>
+            <div className="col-md-6 form-group my-2">
+              <label className="itemTitle">Image:</label>
+              <input 
+                type="file" 
+                className="form-control" 
+                onChange={handleImageChange} 
+              />
+              <div className="image">
+                <img style={{"width":"315px","height":"200px","objectFit":"contain"}}
+                  src={
+                    editingProduct.image ?  `data:image/png;base64,${editingProduct.image}` :"https://th.bing.com/th/id/OIP.gV1cXI_SNBK_nU1yrE_hcwHaGp?rs=1&pid=ImgDetMain"
+                  }
+                  alt=""
+                />
+              </div>
+              
+            </div>
           </div>
-          <div className="bottomInfo">
-            <button className="updateButton" onClick={handleUpdateProduct}>
-              Update
-            </button>
-          </div>
+          <div className="bottomInfo mt-3">
+                <button className="updateButton btn btn-primary w-25" onClick={handleUpdateProduct}>
+                  Update
+                </button>
+              </div>
         </div>
-        <div>
-          {/* Input element for choosing image */}
-          <input type="file" onChange={handleImageChange} />
-
-          {/* Render the image */}
-         
-          <div className="image">
-            <img
-              src={
-                editingProduct.image ?  `data:image/png;base64,${editingProduct.image}` :"https://th.bing.com/th/id/OIP.gV1cXI_SNBK_nU1yrE_hcwHaGp?rs=1&pid=ImgDetMain"
-              }
-              alt=""
-            />
-          </div>
-        </div>
+        
       </div>
       <Snackbar
         anchorOrigin={{

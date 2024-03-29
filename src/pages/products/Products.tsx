@@ -49,16 +49,15 @@ const Products = () => {
     });
   }
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", sortable: true, width: 50 },
     {
       field: "avatar",
-      headerName: "Avatar",
+      headerName: "Image",
       width: 100,
       renderCell: (params) => {
         return (
           <img
             src={
-              `data:image/jpeg;base64,${params.row.image}` || "/noavatar.png"
+              params.row.image?  `data:image/jpeg;base64,${params.row.image}` : "https://th.bing.com/th/id/OIP.gV1cXI_SNBK_nU1yrE_hcwHaGp?rs=1&pid=ImgDetMain"
             }
             alt=""
           />
@@ -66,12 +65,12 @@ const Products = () => {
       },
     },
     { field: "name", headerName: "Name", sortable: true, width: 200 },
-    { field: "code", headerName: "Code", sortable: true, width: 50 },
+    { field: "code", headerName: "Code", sortable: true, width: 150 },
     {
       field: "category_id",
-      headerName: "Category ID",
+      headerName: "Category",
       sortable: true,
-      width: 100,
+      width: 150,
     },
     { field: "price", headerName: "Price", sortable: true, width: 150 },
     { field: "cost", headerName: "Cost", sortable: false, width: 100 },
@@ -80,10 +79,9 @@ const Products = () => {
       field: "alert_quantity",
       headerName: "Alert Quantity",
       sortable: true,
-      width: 50,
+      width: 150,
     },
 
-    { field: "is_active", headerName: "Is Active", sortable: true, width: 100 },
     actionColumn
   ];
 
@@ -105,9 +103,12 @@ const getAllProducts = () => {
   };
   return (
     <div className="products">
-      <h1>Products</h1>
+      <h1>
+        <img src="/products.png" alt="" />
+        Products
+        </h1>
       <Link to={"/new-product"}>
-        <Button>Create New</Button>
+        <button className="btn btn-primary my-2">Add New Product</button>
       </Link>
 
       <DataTable
