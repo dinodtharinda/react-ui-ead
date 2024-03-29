@@ -2,6 +2,7 @@ import React from "react";
 import "./menu.scss";
 import { Link } from "react-router-dom";
 import { menu } from "../../data";
+import { colors } from "@mui/material";
 
 export const Menu = () => {
   const base = window.location.origin;

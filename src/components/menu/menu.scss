@@ -1,6 +1,7 @@
 @import "../../styles/variables.scss";
 
 .menu {
+
   .item {
     display: flex;
     flex-direction: column;
@@ -19,9 +20,15 @@
       gap: 10px;
       padding: 10px;
       border-radius: 5px;
-
-      &:hover{
+      img {
+        width: 30px;
+      }
+      &:hover {
         background-color: $soft-bg;
+      }
+
+      .listItemTitle {
+        color: black;
       }
     }
   }

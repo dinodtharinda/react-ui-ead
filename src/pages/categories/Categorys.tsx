@@ -3,14 +3,14 @@ import "./categorys.scss";
 import { DataTable } from "../../components/dataTable/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
 import { PRODUCT_BASE_URL } from "../../data";
-import { deleteData, getData } from "../../components/API/HttpService";
+import { deleteData, getData, postData } from "../../components/API/HttpService";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { IconButton, Snackbar } from "@mui/material";
 import React from "react";
 
 const Categorys = () => {
-  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const actionColumn: GridColDef = {
     field: "action",
@@ -18,8 +18,7 @@ const Categorys = () => {
     width: 70,
     renderCell: (param) => {
       return (
-        <div className="action">
-         
+        <div className="action"> 
         <div className="delete" onClick={()=>handleDelete(param.row.id)}>
           <img src="/delete.svg" alt="" />
         </div>
@@ -55,7 +54,7 @@ const Categorys = () => {
   const getAllCategories = ()=> {
      getData(`${PRODUCT_BASE_URL}/api/v1/categories`).then((res: any) => {
       if (res.status) {
-        setProducts(res.data);
+        setCategories(res.data);
         console.log("Done");
       }else{
         console.log(res.message)
@@ -70,6 +69,38 @@ const Categorys = () => {
   }, []);
   const handleCloseSnackbar = () => {
     setSnackbarMessage("");
+  };
+
+
+  const [category, setCategory] = useState({ name: "", is_active: true });
+
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCategory({ ...category, [name]: value });
+  };
+
+  const handleSaveCate = () => {
+    if(category.name != ""){
+ postData(`${PRODUCT_BASE_URL}/api/v1/categories`, category)
+    .then((res: any) => {
+      if (res.status) {
+        setSnackbarMessage("Category Created Successful!.");
+        getAllCategories()
+      }
+      console.log(res.message);
+    })
+    .catch((error: any) => {
+      setSnackbarMessage(
+        `Failed to created Category. Please try again. ${error}`
+      );
+    });
+    }else{
+      setSnackbarMessage(
+        `Please Fill Category Name`
+      );
+    }
+   
   };
   return (
     <div className="col-md-12">
@@ -88,17 +119,18 @@ const Categorys = () => {
             className="form-control"
               type="text"
               name="name"
+              onChange={handleInputChange}
             />
           </div>
-          <Link to={"/new-categories"}>
-            <button className="btn btn-primary my-2">Submit</button>
-          </Link>
+         
+            <button className="btn btn-primary my-2" onClick={handleSaveCate}>Submit</button>
+      
         </div>
       </div>
       <div className="products mt-4">
         <DataTable
           columns={columns}
-          rows={products}
+          rows={categories}
           isLoading={isLoading}
           slug="categories"
         />

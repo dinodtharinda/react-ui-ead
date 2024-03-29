@@ -28,9 +28,9 @@ a {
   padding: 5px 20px;
   border-right: 2px solid $soft-bg;
 
-  @include lg{
-    width: max-content;
-  }
+  // @include lg{
+  //   width: max-content;
+  // }
 }
 
 .contentContainer {
