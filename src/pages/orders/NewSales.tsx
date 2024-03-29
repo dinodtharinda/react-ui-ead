@@ -8,26 +8,27 @@ import {
   postData,
   postFormData,
 } from "../../components/API/HttpService";
-import { Product } from "../product/Product";
+
+import Select, { ActionMeta } from "react-select";
+import { GridColDef } from "@mui/x-data-grid";
+import { DataTable } from "../../components/dataTable/DataTable";
+
 interface Option {
-  value: Product;
+  value: ProductModel;
   label: string;
-  qty: 1;
 }
 
-interface Product {
+interface ProductModel {
   id: "";
   name: "";
   code: "";
   category_id: "";
   price: "";
   cost: "";
-  qty: "";
+  image:""
+  quantity: 1;
 }
-type SelectValue = Option[];
-import Select, { ActionMeta } from "react-select";
-import { GridColDef } from "@mui/x-data-grid";
-import { DataTable } from "../../components/dataTable/DataTable";
+// type SelectValue = Option[];
 
 export const NewSale = () => {
   const [sale, setSale] = useState({
@@ -41,26 +42,15 @@ export const NewSale = () => {
     total: [],
   });
 
-  const [products, setProducts] = useState([
-    {
-      id: "",
-      name: "",
-      code: "",
-      category_id: "",
-      price: "",
-      cost: "",
-      qty: "",
-      alert_quantity: "",
-      image: "",
-      description: "",
-      is_active: false,
-      created_at: "",
-      updated_at: "",
-    },
-  ]);
   const [editingSale, setEditingSale] = useState({ ...sale });
-  const [productOption, setProductOption] = useState<Option[]>();
-  const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
+  const [productOption, setProductOption] = useState<Option[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<Option[]>([
+    //    {
+    //   value: null,
+    //   label: "",
+    //   quatity:1
+    // }
+  ]);
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,7 +102,9 @@ export const NewSale = () => {
               className="form-control"
               type="number"
               name="qty"
-                // value={1}
+              min={1}
+              // placeholder="1"
+              value={params.row.quantity}
               onChange={(e) => updateQty(params.row, e)}
             />
           </div>
@@ -121,12 +113,20 @@ export const NewSale = () => {
     },
   ];
 
-  const updateQty = (op: Product, e: any) => {
- 
+  const updateQty = (op: ProductModel, e: any) => {
+    const newPro :ProductModel = {
+      id: op.id,
+      name: op.name,
+      code: op.code,
+      category_id: op.category_id,
+      price: op.price,
+      cost: op.cost,
+      image:op.image,
+      quantity: e.target.value,
+    };
     const newOption: Option = {
-      value: op,
+      value: newPro,
       label: op.name,
-      qty: e.target.value,
     };
 
     replaceSelectedValue(op, newOption);
@@ -149,7 +149,7 @@ export const NewSale = () => {
     //       );
     //     });
     //   console.log("End insertion");
-    console.log(selectedOptions)
+    console.log(selectedOptions);
   };
 
   const handleCloseSnackbar = () => {
@@ -157,14 +157,14 @@ export const NewSale = () => {
   };
 
   async function handleChange(
-    newValue: SelectValue,
+    newValue: Option[],
     actionMeta: ActionMeta<Option>
   ) {
     setSelectedOptions(newValue);
   }
 
-  const replaceSelectedValue = (oldValue: Product, newValue: Option) => {
-    console.log(newValue)
+  const replaceSelectedValue = (oldValue: any, newValue: Option) => {
+    console.log(newValue);
     const updatedOptions = selectedOptions.map((option) => {
       // Check if option and option.value are defined
       if (oldValue == option.value) {
@@ -175,16 +175,27 @@ export const NewSale = () => {
     setSelectedOptions(updatedOptions);
     console.log(selectedOptions);
   };
-  
 
   const getAllProducts = () => {
     getData(`${PRODUCT_BASE_URL}/api/v1/products`).then((res: any) => {
       if (res["status"]) {
-        setProducts(res.data);
-        const newOptions = res.data.map((product: any) => ({
-          value: product,
-          label: product.name,
-        }));
+        // setProducts(res.data);
+        const newOptions = res.data.map((product: any) => {
+          const products: ProductModel = {
+            id: product.id,
+            name: product.name,
+            code: product.code,
+            category_id: product.category_id,
+            price: product.price,
+            image:product.image,
+            cost: product.cost,
+            quantity: 1,
+          };
+          return {
+            value: products,
+            label: product.name,
+          };
+        });
         setProductOption(newOptions);
       }
     });
@@ -196,7 +207,31 @@ export const NewSale = () => {
         <div className="card-header">
           <h2 className="card-title">Add New Sale</h2>
         </div>
-        <div className="card-body">
+     
+      </div>
+      <div className="col-md-6 form-group my-2">
+              <span className="itemTitle">Products</span>
+              <Select
+              
+                options={productOption}
+                isMulti
+                value={selectedOptions}
+                onChange={(newValue, actionMeta) =>
+                  handleChange(newValue as Option[], actionMeta)
+                }
+              />
+            </div>
+      <DataTable
+        columns={columns}
+        rows={
+          selectedOptions?.map((op) => {
+            return op.value;
+          }) ?? []
+        }
+        isLoading={false}
+        slug="products"
+      />
+         <div className="card-body">
           <div className="row">
             <div className="col-md-6 form-group my-2">
               <span className="itemTitle">Total Amount:</span>
@@ -239,17 +274,7 @@ export const NewSale = () => {
               />
             </div>
 
-            <div className="col-md-6 form-group my-2">
-              <span className="itemTitle">Products</span>
-              <Select
-                options={productOption}
-                isMulti
-                value={selectedOptions}
-                onChange={(newValue, actionMeta) =>
-                  handleChange(newValue as SelectValue, actionMeta)
-                }
-              />
-            </div>
+          
 
             <div className="bottomInfo">
               <button
@@ -261,17 +286,6 @@ export const NewSale = () => {
             </div>
           </div>
         </div>
-      </div>
-      <DataTable
-        columns={columns}
-        rows={
-          selectedOptions?.map((op) => {
-            return op.value;
-          }) ?? []
-        }
-        isLoading={false}
-        slug="products"
-      />
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",
