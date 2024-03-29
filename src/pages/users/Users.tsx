@@ -3,6 +3,7 @@ import "./user.scss";
 import { DataTable } from "../../components/dataTable/DataTable";
 import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { userRows } from "../../data";
+import { useState } from "react";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ID", width: 90 },
@@ -53,14 +54,26 @@ const columns: GridColDef[] = [
 ];
 
 const Users = () => {
+  const [open, setOpen] = useState(false);
+
+
+
   return (
     <div className="users">
-      <h1>Users</h1>
+      <div className="info">
+        <h1>Users</h1>
+        <button onClick={() => setOpen(true)}>Add New User</button>
+      </div>
+      <DataTable isLoading={false} slug="users" columns={columns} rows={userRows} />
+      {/* TEST THE API */}
 
-      <button>Add New User</button>
-      <DataTable columns={columns} rows={userRows} slug="users" />
+      {/* {isLoading ? (
+        "Loading..."
+      ) : (
+        <DataTable slug="users" columns={columns} rows={data} />
+      )} */}
+      {/* {open && <Add slug="user" columns={columns} setOpen={setOpen} />} */}
     </div>
   );
 };
-
 export default Users;

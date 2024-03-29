@@ -1,0 +1,111 @@
+.single {
+    .image{
+      img{
+        width: 400px;
+        height: 400px;
+      }
+    }
+      height: 100%;
+      .view {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 20px;
+    
+        .info {
+          flex: 1;
+          padding-right: 20px;
+    
+          .topInfo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+    
+            img {
+              width: 80px;
+              height: auto;
+              margin-right: 20px;
+              border-radius: 5px; /* Added border-radius */
+            }
+    
+            h1 {
+              margin: 0;
+              font-size: 24px;
+              color: #ffffff; /* Changed font color */
+            }
+    
+            button {
+              padding: 10px 20px;
+              background-color: #007bff;
+              color: #fff;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+              transition: background-color 0.3s;
+    
+              &:hover {
+                background-color: #0056b3;
+              }
+            }
+          }
+    
+          .details {
+            .item {
+              display: flex;
+              align-items: center; /* Align labels and inputs vertically */
+              margin-bottom: 10px;
+    
+              .itemTitle {
+                font-weight: bold;
+                margin-right: 10px;
+                font-size: 16px;
+                color: #ffffff; /* Changed font color */
+                width: 150px; /* Fixed width for labels */
+              }
+    
+              input[type="text"],
+              input[type="checkbox"] {
+                flex: 1; /* Fill remaining space */
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 14px;
+                color: #ffffff; /* Changed font color */
+                background-color: #f9f9f9; /* Changed background color */
+                margin-left: 10px; /* Added margin to separate labels and inputs */
+              }
+    
+              input[type="checkbox"] {
+                margin-top: 5px; /* Adjust alignment for checkboxes */
+              }
+            }
+          }
+          .bottomInfo {
+              margin-top: 20px;
+              display: flex;
+              justify-content: flex-end;
+      
+              .updateButton {
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+      
+                &:hover {
+                  background-color: #0056b3;
+                }
+              }
+            }
+        }
+    
+        .chart {
+          flex: 1;
+        }
+      }
+    
+   
+    }
+    

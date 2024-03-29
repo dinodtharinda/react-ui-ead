@@ -2,11 +2,9 @@
 
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8081/invento-hub/";
-
-export const getData = async (url:string) => {
+export const getData = async (url: string) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}${url}`);
+    const response = await axios.get(`${url}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching posts: ", error);
@@ -14,10 +12,10 @@ export const getData = async (url:string) => {
   }
 };
 
-export const postData = async (url:string, requestBody :any) => {
+export const postData = async (url: string, requestBody: any) => {
   try {
     console.log(requestBody);
-    const response = await axios.post(`${API_BASE_URL}${url}`, requestBody);
+    const response = await axios.post(`${url}`, requestBody);
     return response.data;
   } catch (error) {
     console.error("Error fetching posts: ", error);
@@ -25,10 +23,32 @@ export const postData = async (url:string, requestBody :any) => {
   }
 };
 
+
+export const postFormData = async (url: string, requestBody: any) => {
+  try {
+    const formData = new FormData();
+
+    // Iterate over the requestBody object and append each key-value pair to the formData
+    for (const key in requestBody) {
+      formData.append(key, requestBody[key]);
+    }
+
+    const response = await axios.post(url, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // Set the content type to multipart/form-data
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error posting data: ", error);
+    throw error;
+  }
+};
 
 export const putData = async (url: string, requestBody: any) => {
   try {
-    const response = await axios.put(`${API_BASE_URL}${url}`, requestBody);
+    const response = await axios.put(`${url}`, requestBody);
     return response.data;
   } catch (error) {
     console.error("Error updating data: ", error);
@@ -38,8 +58,9 @@ export const putData = async (url: string, requestBody: any) => {
 
 export const deleteData = async (url: string) => {
   try {
-    await axios.delete(`${API_BASE_URL}${url}`);
+    const response = await axios.delete(`${url}`);
     console.log("Data deleted successfully");
+    return response;
   } catch (error) {
     console.error("Error deleting data: ", error);
     throw error;
@@ -47,3 +68,4 @@ export const deleteData = async (url: string) => {
 };
 
 //string cutomerName = SELECT c.firstName FROM Customer c  WHERE c.id=9
+

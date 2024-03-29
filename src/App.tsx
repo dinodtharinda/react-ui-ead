@@ -9,6 +9,18 @@ import { LoginForm } from "./pages/login/LoginForm";
 import "./styles/global.scss";
 import { AuthContext } from "./components/routeManage/RouteManage";
 import { useContext } from "react";
+import { Product } from "./pages/product/Product";
+import { User } from "./pages/user/User";
+import { NewProduct } from "./pages/product/NewProduct";
+import { Customers } from "./pages/customers/Customers";
+import Categorys from "./pages/categories/Categorys";
+import { NewCategory } from "./pages/categories/NewCategory";
+
+import { NewCustomer } from "./pages/customer/NewCustomer";
+import { Orders } from "./pages/orders/Orders";
+import { Customer } from "./pages/customer/Customer";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 
 function App() {
@@ -17,16 +29,17 @@ function App() {
     return (
       <div className="main">
         <Navbar />
-
-        <div className="container">
+        <div className="content">
           <div className="menuContainer">
             <Menu />
           </div>
           <div className="contentContainer">
-            <Outlet />
+         
+              <Outlet />
+          
           </div>
         </div>
-        <Footer />
+        <Footer  />
       </div>
     );
   };
@@ -47,12 +60,48 @@ function App() {
           element: <Home />,
         },
         {
-          path: "users",
+          path: "/users",
           element: <Users />,
         },
         {
-          path: "products",
+          path: "/products",
           element: <Products />,
+        },
+
+        {
+          path: "/users/:id",
+          element: <User />,
+        },
+        {
+          path: "/products/:id",
+          element: <Product />,
+        },
+        {
+          path: "/customers",
+          element: <Customers />,
+        },
+        {
+          path: "/new-product",
+          element: <NewProduct />,
+        },
+        {
+          path: "/categorys",
+          element: <Categorys />,
+        }, {
+          path: "/new-categories",
+          element: <NewCategory />,
+        },
+        {
+          path: "/customers/:id",
+          element: <Customer />,
+        },
+        {
+          path: "/new-customers",
+          element: <NewCustomer />,
+        },
+        {
+          path: "/orders",
+          element: <Orders />,
         },
       ],
     },
