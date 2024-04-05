@@ -1,8 +1,7 @@
  export const USER_BASE_URL = "http://localhost:8081/invento-hub";
  export const PRODUCT_BASE_URL = "http://localhost:8082/invento-hub";
  export const CUSTOMER_BASE_URL = "http://localhost:8084/invento-hub";
-
-
+ export const SALES_BASE_URL = "http://localhost:8085/invento-hub";
 
 
 export const menu = [
@@ -16,17 +15,12 @@ export const menu = [
           url: "/",
           icon: "dashboard.png",
         },
-        {
-          id: 2,
-          title: "Profile",
-          url: "/users/1",
-          icon: "profile.png",
-        },
+       
       ],
     },
     {
       id: 2,
-      title: "lists",
+      title: "product catelog",
       listItems: [
         // {
         //   id: 1,
@@ -35,29 +29,21 @@ export const menu = [
         //   icon: "user.svg",
         // },
         {
-          id: 2,
-          title: "Products",
-          url: "/products",
-          icon: "products.png",
-        },
-        {
-          id: 3,
-          title: "Sales",
-          url: "/sales",
-          icon: "orders.png",
-        },
-        {
-          id: 3,
-          title: "Customer",
-          url: "/customers",
-          icon: "customers.png",
-        },
-        {
           id: 3,
           title: "Category",
           url: "/categorys",
           icon: "categories.png",
         },
+        {
+          id: 2,
+          title: "Products",
+          url: "/products",
+          icon: "products.png",
+        },
+      
+       
+        
+       
         // {
         //   id: 4,
         //   title: "Posts",
@@ -66,72 +52,45 @@ export const menu = [
         // },
       ],
     },
-    // {
-    //   id: 3,
-    //   title: "general",
-    //   listItems: [
-    //     {
-    //       id: 1,
-    //       title: "Elements",
-    //       url: "/",
-    //       icon: "element.svg",
-    //     },
-    //     {
-    //       id: 2,
-    //       title: "Notes",
-    //       url: "/",
-    //       icon: "note.svg",
-    //     },
-    //     {
-    //       id: 3,
-    //       title: "Forms",
-    //       url: "/",
-    //       icon: "form.svg",
-    //     },
-    //     {
-    //       id: 4,
-    //       title: "Calendar",
-    //       url: "/",
-    //       icon: "calendar.svg",
-    //     },
-    //   ],
-    // },
-    // {
-    //   id: 4,
-    //   title: "Maintenance",
-    //   listItems: [
-    //     {
-    //       id: 1,
-    //       title: "Settings",
-    //       url: "/",
-    //       icon: "setting.svg",
-    //     },
-    //     {
-    //       id: 2,
-    //       title: "Backups",
-    //       url: "/",
-    //       icon: "backup.svg",
-    //     },
-    //   ],
-    // },
-    // {
-    //   id: 5,
-    //   title: "analytics",
-    //   listItems: [
-    //     {
-    //       id: 1,
-    //       title: "Charts",
-    //       url: "/",
-    //       icon: "chart.svg",
-    //     },
-    //     {
-    //       id: 2,
-    //       title: "Logs",
-    //       url: "/",
-    //       icon: "log.svg",
-    //     },
-    //   ],
-    // },
+    {
+      id: 3,
+      title: "sale management",
+      listItems: [
+        {
+          id: 3,
+          title: "Sales",
+          url: "/sales",
+          icon: "orders.png",
+        },
+       
+      ],
+    },
+
+    {
+      id: 5,
+      title: "CRM",
+      listItems: [ 
+        {
+          id: 3,
+          title: "Customer",
+          url: "/customers",
+          icon: "customers.png",
+        },
+      ],
+    },
+    {
+      id: 5,
+      title: "Settings",
+      listItems: [ 
+        {
+          id: 2,
+          title: "User Profile",
+          url: "/users/1",
+          icon: "profile.png",
+        },
+      ],
+    },
+  
   ];
 
   export const topDealUsers = [

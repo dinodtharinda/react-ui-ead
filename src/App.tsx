@@ -15,9 +15,7 @@ import { NewProduct } from "./pages/product/NewProduct";
 import { Customers } from "./pages/customers/Customers";
 import Categorys from "./pages/categories/Categorys";
 // import { NewCategory } from "./pages/categories/NewCategory";
-
 import { NewCustomer } from "./pages/customer/NewCustomer";
-
 import { Customer } from "./pages/customer/Customer";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Sales from "./pages/orders/Sales";
@@ -27,6 +25,7 @@ import { NewSale } from "./pages/orders/NewSales";
 
 function App() {
   const { authenticated } = useContext(AuthContext)!;
+
   const Layout = () => {
     return (
       <div className="main">
@@ -35,10 +34,8 @@ function App() {
           <div className="menuContainer">
             <Menu />
           </div>
-          <div className="contentContainer">
-         
-              <Outlet />
-          
+          <div className="contentContainer">         
+              <Outlet />          
           </div>
         </div>
         <Footer  />

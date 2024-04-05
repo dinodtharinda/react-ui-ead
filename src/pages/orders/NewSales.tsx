@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { IconButton, Snackbar } from "@mui/material";
-import { PRODUCT_BASE_URL } from "../../data";
+import { CUSTOMER_BASE_URL, PRODUCT_BASE_URL, SALES_BASE_URL } from "../../data";
 import {
   getData,
   postData,
@@ -23,10 +23,10 @@ interface ProductModel {
   name: "";
   code: "";
   category_id: "";
-  price: "";
+  price: 0;
   cost: "";
-  image:""
-  quantity: 1;
+  image: "";
+  quantity:number ;
 }
 // type SelectValue = Option[];
 
@@ -44,14 +44,14 @@ export const NewSale = () => {
 
   const [editingSale, setEditingSale] = useState({ ...sale });
   const [productOption, setProductOption] = useState<Option[]>([]);
-  const [selectedOptions, setSelectedOptions] = useState<Option[]>([
-    //    {
-    //   value: null,
-    //   label: "",
-    //   quatity:1
-    // }
-  ]);
+  const [selectedOptions, setSelectedOptions] = useState<Option[]>([]);
   const [snackbarMessage, setSnackbarMessage] = useState("");
+
+  const [totalAmout, setTotalAmount] = useState(0.0);
+  const [quantity, setQuantity] = useState(0.0);
+  const [discount, setDiscount] = useState(0.0);
+  const [grandTotal, setGrandTotal] = useState(0.0);
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -61,7 +61,7 @@ export const NewSale = () => {
   const options: Option[] = [];
   useEffect(() => {
     getAllProducts();
-
+    getAllCustomers()
     console.log(options);
   }, []);
   const columns: GridColDef[] = [
@@ -114,15 +114,15 @@ export const NewSale = () => {
   ];
 
   const updateQty = (op: ProductModel, e: any) => {
-    const newPro :ProductModel = {
+    const newPro: ProductModel = {
       id: op.id,
       name: op.name,
       code: op.code,
       category_id: op.category_id,
       price: op.price,
       cost: op.cost,
-      image:op.image,
-      quantity: e.target.value,
+      image: op.image,
+      quantity: parseInt(e.target.value),
     };
     const newOption: Option = {
       value: newPro,
@@ -130,36 +130,74 @@ export const NewSale = () => {
     };
 
     replaceSelectedValue(op, newOption);
+    
+  };
+
+  const calculate = (op: Option[],dis:number) => {
+    var newTotal = 0;
+    var newQty = 0;
+    var newGTotal = 0;
+    var saleQty :number[] =[]
+    var saleUnitPrice:number[] =[]
+    var saleTotals :number[] =[]
+    var saleProducts:string[] = []
+    op.forEach((element) => {
+      const sub = element.value.price * element.value.quantity;
+      saleQty.push(element.value.quantity)
+      saleTotals.push(sub)
+      saleUnitPrice.push(element.value.price)
+      saleProducts.push(element.value.id)
+      newTotal = newTotal + sub;
+      newQty = newQty + element.value.quantity;
+    });
+
+    newGTotal = newTotal - dis;
+
+    setEditingSale({
+      ...editingSale,
+      total_amount: newTotal,
+      grand_total: newGTotal,
+      product_id: saleProducts as never[],
+      unit_prices: saleUnitPrice as never[],
+      total: saleTotals as never[],
+      order_discount:dis,
+      qty: saleQty as never[]
+    });
+
+    setGrandTotal(newGTotal)
+    setQuantity(newQty)
+    setTotalAmount(newTotal);
   };
 
   const handleInsert = () => {
-    //   console.log("Start insertion");
-    //   postData(`${PRODUCT_BASE_URL}/api/v1/products`, editingSale)
-    //     .then((res: any) => {
-    //       if (res.status) {
-    //         setSnackbarMessage("Product updated successfully.");
-    //       } else {
-    //         setSnackbarMessage(res.message);
-    //       }
-    //       console.log("Done insertion");
-    //     })
-    //     .catch((error: any) => {
-    //       setSnackbarMessage(
-    //         `Failed to update product. Please try again. ${error}`
-    //       );
-    //     });
-    //   console.log("End insertion");
-    console.log(selectedOptions);
+      console.log("Start insertion");
+      postData(`${SALES_BASE_URL}/api/v1/sales`, editingSale)
+        .then((res: any) => {
+          if (res.status) {
+            setSnackbarMessage("Sale Placed successfully.");
+          } else {
+            setSnackbarMessage(res.message);
+          }
+          console.log("Done insertion");
+        })
+        .catch((error: any) => {
+          setSnackbarMessage(
+            `Failed to update Sale. Please try again. ${error}`
+          );
+        });
+      console.log("End insertion");
+    console.log(editingSale);
   };
 
   const handleCloseSnackbar = () => {
     setSnackbarMessage("");
   };
 
-  async function handleChange(
+  async function handleSelectChange(
     newValue: Option[],
     actionMeta: ActionMeta<Option>
   ) {
+    calculate(newValue,discount);
     setSelectedOptions(newValue);
   }
 
@@ -174,9 +212,12 @@ export const NewSale = () => {
     });
     setSelectedOptions(updatedOptions);
     console.log(selectedOptions);
+    calculate(updatedOptions,discount);
   };
 
+
   const getAllProducts = () => {
+    calculate(selectedOptions,discount);
     getData(`${PRODUCT_BASE_URL}/api/v1/products`).then((res: any) => {
       if (res["status"]) {
         // setProducts(res.data);
@@ -187,7 +228,7 @@ export const NewSale = () => {
             code: product.code,
             category_id: product.category_id,
             price: product.price,
-            image:product.image,
+            image: product.image,
             cost: product.cost,
             quantity: 1,
           };
@@ -200,6 +241,37 @@ export const NewSale = () => {
       }
     });
   };
+  const [customers, setCustomers] = useState([{
+    id: "",
+    f_name: "",
+    l_name: "",
+    email: "",
+    phone_number:""
+
+  }]);
+  const getAllCustomers = () => {
+    getData(`${CUSTOMER_BASE_URL}/api/v1/customers`).then((res: any) => {
+       if (res["status"]) {
+         setCustomers(res.data);
+       }
+     
+     });
+ }
+
+
+  const handleDiscountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setDiscount(parseInt(value));
+    calculate(selectedOptions,parseInt(value));
+  };
+
+  const handleCategoriesOption = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setSale({ ...sale, [name]: value });
+  };
 
   return (
     <div className="col-md-12">
@@ -207,19 +279,33 @@ export const NewSale = () => {
         <div className="card-header">
           <h2 className="card-title">Add New Sale</h2>
         </div>
-     
       </div>
       <div className="col-md-6 form-group my-2">
-              <span className="itemTitle">Products</span>
-              <Select
-              
-                options={productOption}
-                isMulti
-                value={selectedOptions}
-                onChange={(newValue, actionMeta) =>
-                  handleChange(newValue as Option[], actionMeta)
-                }
-              />
+        <span className="itemTitle">Products</span>
+        <Select
+          options={productOption}
+          isMulti
+          value={selectedOptions}
+          onChange={(newValue, actionMeta) =>
+            handleSelectChange(newValue as Option[], actionMeta)
+          }
+        />
+      </div>
+      <div className="col-md-6 form-group my-2">
+              <span className="itemTitle">Customer:</span>
+              <select
+                 className="form-control"
+                name="customer_id"
+                value={sale.customer_id}
+                onChange={handleCategoriesOption}
+              >
+                <option value="">Select Customer</option>
+                {customers.map((customer) => (
+                  <option key={customer.id} value={customer.f_name}>
+                 {customer.id}   {customer.f_name} {customer.l_name}
+                  </option>
+                ))}
+              </select>
             </div>
       <DataTable
         columns={columns}
@@ -231,61 +317,59 @@ export const NewSale = () => {
         isLoading={false}
         slug="products"
       />
-         <div className="card-body">
-          <div className="row">
-            <div className="col-md-6 form-group my-2">
-              <span className="itemTitle">Total Amount:</span>
-              <input
-                type="number"
-                name="price"
-                className="form-control"
-                value={editingSale.total_amount}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="col-md-6 form-group my-2">
-              <span className="itemTitle">Order Discount:</span>
-              <input
-                className="form-control"
-                type="number"
-                name="cost"
-                value={editingSale.order_discount}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="col-md-6 form-group my-2">
-              <span className="itemTitle">Quantity:</span>
-              <input
-                className="form-control"
-                type="number"
-                name="qty"
-                value={editingSale.qty}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="col-md-6 form-group my-2">
-              <span className="itemTitle">Grand Total</span>
-              <input
-                className="form-control"
-                type="number"
-                name="alert_quantity"
-                value={editingSale.grand_total}
-                onChange={handleInputChange}
-              />
-            </div>
+      <div className="card-body">
+        <div className="row">
+          <div className="col-md-6 form-group my-2">
+            <span className="itemTitle">Total Amount:</span>
+            <input
+              type="number"
+              name="price"
+              className="form-control"
+              value={totalAmout}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="col-md-6 form-group my-2">
+            <span className="itemTitle">Order Discount:</span>
+            <input
+              className="form-control"
+              type="number"
+              name="cost"
+              value={discount}
+              onChange={handleDiscountChange}
+            />
+          </div>
+          <div className="col-md-6 form-group my-2">
+            <span className="itemTitle">Quantity:</span>
+            <input
+              className="form-control"
+              type="number"
+              name="qty"
+              value={quantity}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="col-md-6 form-group my-2">
+            <span className="itemTitle">Grand Total</span>
+            <input
+              className="form-control"
+              type="number"
+              name="alert_quantity"
+              value={grandTotal}
+              onChange={handleInputChange}
+            />
+          </div>
 
-          
-
-            <div className="bottomInfo">
-              <button
-                className="updateButton btn btn-primary mt-3 w-25"
-                onClick={handleInsert}
-              >
-                Place Order
-              </button>
-            </div>
+          <div className="bottomInfo">
+            <button
+              className="updateButton btn btn-primary mt-3 w-25"
+              onClick={handleInsert}
+            >
+              Place Order
+            </button>
           </div>
         </div>
+      </div>
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",
