@@ -3,7 +3,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { getData, postData, putData } from "../../components/API/HttpService";
 import { CUSTOMER_BASE_URL } from "../../data";
 import { useParams } from "react-router-dom";
-
+import { useNavigate } from 'react-router-dom';
 export const NewCustomer = () => {
   const [customer, setCustomer] = useState({
     id: "",
@@ -13,7 +13,11 @@ export const NewCustomer = () => {
     phone_number:""
 
   });
+  const navigate = useNavigate();
 
+  const handleRedirectBack = () => {
+    navigate(-1); // -1 goes back one step in history
+  };
   const [editingCustomer, setEditingCustomer] = useState({ ...customer });
   const [snackbarMessage, setSnackbarMessage] = useState("");
 
@@ -26,14 +30,15 @@ export const NewCustomer = () => {
     postData(`${CUSTOMER_BASE_URL}/api/v1/customers`, editingCustomer)
       .then((res: any) => {
         if (res.status) {
-          setSnackbarMessage("Product updated successfully.");
+          setSnackbarMessage(" successfully.");
+          handleRedirectBack()
         }else{
           setSnackbarMessage(res.message);
         } 
       })
       .catch((error: any) => {
         setSnackbarMessage(
-          `Failed to update product. Please try again. ${error}`
+          `Failed to update . Please try again. ${error}`
         );
       });
     console.log(editingCustomer)
@@ -41,6 +46,8 @@ export const NewCustomer = () => {
   const handleCloseSnackbar = () => {
     setSnackbarMessage("");
   };
+
+
   return (
     <div className="col-md-12">
       <div className="card">

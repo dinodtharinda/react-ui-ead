@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 // import "./product.scss";*
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 // import { IconButton, Snackbar } from "@mui/material";
 import { PRODUCT_BASE_URL } from "../../data";
 import { getData, putData } from "../../components/API/HttpService";
@@ -36,7 +36,11 @@ export const Product = () => {
    getCategories()
    getProductDetails()
   }, []);
+  const navigate = useNavigate();
 
+  const handleRedirectBack = () => {
+    navigate(-1); // -1 goes back one step in history
+  };
   const getProductDetails = () =>{
     getData(`${PRODUCT_BASE_URL}/api/v1/products/${id}`).then(
       (res: any) => {
@@ -86,6 +90,7 @@ export const Product = () => {
       .then((res: any) => {
         if (res.status) {
           setSnackbarMessage("Product updated successfully.");
+          handleRedirectBack()
         }
         console.log(res.message)
       })

@@ -19,9 +19,6 @@ type Props = {
 
 export const DataTable = (props: Props) => {
 
-
-
-
   return (
     <div className="dataTable">
       <DataGrid

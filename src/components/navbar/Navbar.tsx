@@ -51,8 +51,8 @@ export const Navbar = () => {
   return (
     <div className="navbar">
       <div className="logo">
-        <img src={`${base}/logo.svg`} alt="" />
-        <span>invent</span>
+       
+        <h2 style={{marginLeft:"20px"}}>INVENTO</h2>
       </div>
       <div className="icons">
         <img src="/search.svg" alt="icon" />

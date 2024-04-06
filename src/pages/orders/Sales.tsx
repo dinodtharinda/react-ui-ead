@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 
 import { DataTable } from "../../components/dataTable/DataTable";
 import { GridColDef } from "@mui/x-data-grid";
-import { PRODUCT_BASE_URL } from "../../data";
+import { PRODUCT_BASE_URL, SALES_BASE_URL } from "../../data";
 import { deleteData, getData } from "../../components/API/HttpService";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import { CircularProgress, IconButton, Snackbar } from "@mui/material";
 import React from "react";
 const Sales = () => {
-  const [products, setProducts] = useState([]);
+  const [sales, setSales] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const actionColumn: GridColDef = {
@@ -19,9 +19,6 @@ const Sales = () => {
     renderCell: (param) => {
       return (
         <div className="action">
-          <Link to={`/products/${param.row.id}`}>
-            <img src="/view.svg" alt="" />
-          </Link>
         <div className="delete" onClick={()=>handleDelete(param.row.id)}>
           <img src="/delete.svg" alt="" />
         </div>
@@ -33,14 +30,14 @@ const Sales = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const handleDelete = (id:number)=>{
     console.log(id)
-    deleteData(`${PRODUCT_BASE_URL}/api/v1/products/${id}`).then((res: any) => {
+    deleteData(`${SALES_BASE_URL}/api/v1/sales/${id}`).then((res: any) => {
       // setIsLoading(true)
       console.log(res)
       if (res.status) {
         setSnackbarMessage(
-          `Proudct Deleted!`
+          `Deleted!`
         );
-        getAllProducts()
+        getAllSales()
       }else{
         setSnackbarMessage(
           `Deletion Failed!`
@@ -50,54 +47,28 @@ const Sales = () => {
     });
   }
   const columns: GridColDef[] = [
-    {
-      field: "avatar",
-      headerName: "Image",
-      width: 100,
-      renderCell: (params) => {
-        return (
-          <img
-            src={
-              params.row.image?  `data:image/jpeg;base64,${params.row.image}` : "https://th.bing.com/th/id/OIP.gV1cXI_SNBK_nU1yrE_hcwHaGp?rs=1&pid=ImgDetMain"
-            }
-            alt=""
-          />
-        );
-      },
-    },
-    { field: "name", headerName: "Name", sortable: true, width: 200 },
-    { field: "code", headerName: "Code", sortable: true, width: 150 },
-    {
-      field: "category_id",
-      headerName: "Category",
-      sortable: true,
-      width: 150,
-    },
-    { field: "price", headerName: "Price", sortable: true, width: 150 },
-    { field: "cost", headerName: "Cost", sortable: false, width: 100 },
-    { field: "qty", headerName: "Quantity", sortable: true, width: 100 },
-    {
-      field: "alert_quantity",
-      headerName: "Alert Quantity",
-      sortable: true,
-      width: 150,
-    },
-
+    
+    { field: "reference_no", headerName: "Reference no", sortable: true, width: 200 },
+    { field: "customer_name", headerName: "Customer", sortable: true, width: 150 },
+    { field: "total_amount", headerName: "Total Amount", sortable: true, width: 150 },
+    { field: "order_discount", headerName: "Order Discount", sortable: true, width: 150 },
+    { field: "grand_total", headerName: "Grand Total", sortable: true, width: 150 },
+    { field: "paid_amount", headerName: "Paid Amount", sortable: true, width: 150 },
     actionColumn
   ];
 
 
-const getAllProducts = () => {
-   getData(`${PRODUCT_BASE_URL}/api/v1/products`).then((res: any) => {
+const getAllSales = () => {
+   getData(`${SALES_BASE_URL}/api/v1/sales`).then((res: any) => {
       if (res["status"]) {
-        setProducts(res.data);
+        setSales(res.data);
       }
       setIsLoading(false);
     });
 }
  
   useEffect(() => {
-   getAllProducts()
+   getAllSales()
   }, []);
   const handleCloseSnackbar = () => {
     setSnackbarMessage("");
@@ -114,7 +85,7 @@ const getAllProducts = () => {
 
       <DataTable
         columns={columns}
-        rows={products}
+        rows={sales}
         isLoading={isLoading}
         slug="products"
       />

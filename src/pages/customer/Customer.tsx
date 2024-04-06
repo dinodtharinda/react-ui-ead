@@ -18,7 +18,6 @@ export const Customer = () => {
   const [editingCustomer, setEditingCustomer] = useState({ ...customer });
   const [snackbarMessage, setSnackbarMessage] = useState("");
   useEffect(() => {
-  
     getCustomerDetails();
   }, []);
 
@@ -32,7 +31,7 @@ export const Customer = () => {
       }
     });
   };
-
+  
 
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

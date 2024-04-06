@@ -87,6 +87,7 @@ const Categorys = () => {
       if (res.status) {
         setSnackbarMessage("Category Created Successful!.");
         getAllCategories()
+        setCategory({ ...category, ["name"]: "" });
       }
       console.log(res.message);
     })

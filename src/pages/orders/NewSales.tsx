@@ -12,6 +12,7 @@ import {
 import Select, { ActionMeta } from "react-select";
 import { GridColDef } from "@mui/x-data-grid";
 import { DataTable } from "../../components/dataTable/DataTable";
+import { useNavigate } from "react-router-dom";
 
 interface Option {
   value: ProductModel;
@@ -39,6 +40,7 @@ export const NewSale = () => {
     product_id: [],
     qty: [],
     unit_prices: [],
+    paid_amount:'',
     total: [],
   });
 
@@ -51,11 +53,12 @@ export const NewSale = () => {
   const [quantity, setQuantity] = useState(0.0);
   const [discount, setDiscount] = useState(0.0);
   const [grandTotal, setGrandTotal] = useState(0.0);
-
+  const [paidAmount, setPaidAmount] = useState(0.0);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setEditingSale({ ...editingSale, [name]: value });
+    console.log(name+value)
   };
 
   const options: Option[] = [];
@@ -161,12 +164,20 @@ export const NewSale = () => {
       unit_prices: saleUnitPrice as never[],
       total: saleTotals as never[],
       order_discount:dis,
-      qty: saleQty as never[]
+      qty: saleQty as never[],
+      // paid_amount:paidAmount.toString()
     });
 
     setGrandTotal(newGTotal)
     setQuantity(newQty)
     setTotalAmount(newTotal);
+
+  };
+
+  const navigate = useNavigate();
+
+  const handleRedirectBack = () => {
+    navigate(-1); // -1 goes back one step in history
   };
 
   const handleInsert = () => {
@@ -175,6 +186,7 @@ export const NewSale = () => {
         .then((res: any) => {
           if (res.status) {
             setSnackbarMessage("Sale Placed successfully.");
+            handleRedirectBack()
           } else {
             setSnackbarMessage(res.message);
           }
@@ -264,6 +276,18 @@ export const NewSale = () => {
 
     setDiscount(parseInt(value));
     calculate(selectedOptions,parseInt(value));
+  };
+
+
+  const handlePaidChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    console.log(value)
+    setPaidAmount(parseInt(value));
+
+    setEditingSale({
+      ...editingSale,  
+      paid_amount:value
+    });
   };
 
   const handleCategoriesOption = (
@@ -359,7 +383,16 @@ export const NewSale = () => {
               onChange={handleInputChange}
             />
           </div>
-
+          <div className="col-md-6 form-group my-2">
+            <span className="itemTitle">Paid Amount</span>
+            <input
+              className="form-control"
+              type="number"
+              name="paid_amount"
+              value={paidAmount}
+              onChange={handlePaidChange}
+            />
+          </div>
           <div className="bottomInfo">
             <button
               className="updateButton btn btn-primary mt-3 w-25"

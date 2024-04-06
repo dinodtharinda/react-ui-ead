@@ -3,6 +3,7 @@ import './user.scss'
 import { IconButton, Snackbar } from '@mui/material';
 import { CUSTOMER_BASE_URL, USER_BASE_URL } from '../../data';
 import { getData, postData, putData } from '../../components/API/HttpService';
+import Cookies from "js-cookie";
 export const User = () => {
   const [admin, setAdmin] = useState({
     id: "",
@@ -49,6 +50,7 @@ export const User = () => {
       .then((res: any) => {
         if (res.status) {
           setSnackbarMessage("updated successfully.");
+          Cookies.set("user", JSON.stringify(res.data), { expires: 1 / 24 });
         }else{
           setSnackbarMessage(res.message);
         } 

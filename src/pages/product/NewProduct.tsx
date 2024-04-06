@@ -9,6 +9,7 @@ import {
   postData,
   postFormData,
 } from "../../components/API/HttpService";
+import { useNavigate } from "react-router-dom";
 
 export const NewProduct = () => {
   const [product, setProduct] = useState({
@@ -26,6 +27,11 @@ export const NewProduct = () => {
     created_at: "",
     updated_at: "",
   });
+  const navigate = useNavigate();
+
+  const handleRedirectBack = () => {
+    navigate(-1); // -1 goes back one step in history
+  };
 
   const [editingProduct, setEditingProduct] = useState({ ...product });
   const [categories, setCategories] = useState([{ id: "", name: "name" }]);
@@ -51,7 +57,8 @@ export const NewProduct = () => {
     postData(`${PRODUCT_BASE_URL}/api/v1/products`, editingProduct)
       .then((res: any) => {
         if (res.status) {
-          setSnackbarMessage("Product updated successfully.");
+          setSnackbarMessage("Product added successfully.");
+          handleRedirectBack()
         } else {
           setSnackbarMessage(res.message);
         }
@@ -102,10 +109,11 @@ export const NewProduct = () => {
 
     return btoa(binary);
   }
-  function handleTextAreaChange(event: ChangeEvent<HTMLTextAreaElement>): void {
-    throw new Error("Function not implemented.");
-  }
 
+  const handleTextAreaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setEditingProduct({ ...editingProduct, [name]: value });
+  };
   return (
     <div className="col-md-12">
       <div className="card">

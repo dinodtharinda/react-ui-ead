@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import './cutomers.scss'
-import { DataTable } from '../../components/dataTable/DataTable';
+import React, { useEffect, useState } from "react";
+import "./cutomers.scss";
+import { DataTable } from "../../components/dataTable/DataTable";
 import { CUSTOMER_BASE_URL, PRODUCT_BASE_URL, userRows } from "../../data";
-import { GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { deleteData, getData } from '../../components/API/HttpService';
-import { Link } from 'react-router-dom';
-import { Button } from '@mui/material';
+import { GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import { deleteData, getData } from "../../components/API/HttpService";
+import { Link } from "react-router-dom";
+import { Button } from "@mui/material";
 export const Customers = () => {
   const [open, setOpen] = useState(false);
   const [customers, setCustomers] = useState([]);
+  const [search, setSearch] = useState("");
   const actionColumn: GridColDef = {
     field: "action",
     headerName: "Actions",
@@ -19,17 +20,14 @@ export const Customers = () => {
           <Link to={`/customers/${param.row.id}`}>
             <img src="/view.svg" alt="" />
           </Link>
-        <div className="delete" onClick={()=>handleDelete(param.row.id)}>
-          <img src="/delete.svg" alt="" />
+          <div className="delete" onClick={() => handleDelete(param.row.id)}>
+            <img src="/delete.svg" alt="" />
+          </div>
         </div>
-        </div>
-        
       );
     },
   };
   const columns: GridColDef[] = [
-   
-  
     {
       field: "f_name",
       headerName: "First name",
@@ -55,48 +53,67 @@ export const Customers = () => {
       editable: true,
     },
 
-    actionColumn
+    actionColumn,
   ];
-    const [snackbarMessage, setSnackbarMessage] = useState("");
-  const handleDelete = (id:number)=>{
-    console.log(id)
-    deleteData(`${CUSTOMER_BASE_URL}/api/v1/customers/${id}`).then((res: any) => {
-      // setIsLoading(true)
-      console.log(res)
-      if (res.status) {
-        setSnackbarMessage(
-          `Proudct Deleted!`
-        );
-        getAllCustomers()
-      }else{
-        setSnackbarMessage(
-          `Deletion Failed!`
-        );
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const handleDelete = (id: number) => {
+    console.log(id);
+    deleteData(`${CUSTOMER_BASE_URL}/api/v1/customers/${id}`).then(
+      (res: any) => {
+        // setIsLoading(true)
+        console.log(res);
+        if (res.status) {
+          setSnackbarMessage(`Proudct Deleted!`);
+          getAllCustomers(search);
+        } else {
+          setSnackbarMessage(`Deletion Failed!`);
+        }
       }
-      
-    });
-  }
+    );
+  };
   useEffect(() => {
-   getAllCustomers()
-   }, [])
-  const getAllCustomers = () => {
-    getData(`${CUSTOMER_BASE_URL}/api/v1/customers`).then((res: any) => {
-       if (res["status"]) {
-         setCustomers(res.data);
-       }
-     
-     });
- }
+    getAllCustomers(search);
+  }, []);
+  const getAllCustomers = (searchd:String) => {
+    getData(`${CUSTOMER_BASE_URL}/api/v1/customers?f_name=${searchd}`).then(
+      (res: any) => {
+        if (res["status"]) {
+          setCustomers(res.data);
+        }
+      }
+    );
+  };
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSearch(value);
+    getAllCustomers(value);
+    console.log(value)
+  };
   return (
     <div className="users">
-        <h1>
-          <img src="/customers.png" alt="" />
-          Customers
-          </h1>
-        <Link to={"/new-customers"}>
+      <h1>
+        <img src="/customers.png" alt="" />
+        Customers
+      </h1>
+      <Link to={"/new-customers"}>
         <button className="btn btn-primary my-2">Add New Customer</button>
       </Link>
-      <DataTable isLoading={false} slug="users" columns={columns} rows={customers} />
+      <div className="col-md-6 mt-2 mb-2">
+        <label className="itemTitle">Search Customer By First Name</label>
+        <input
+          className="form-control"
+          type="text"
+          value={search}
+          onChange={handleSearch}
+        />
+      </div>
+      <DataTable
+        isLoading={false}
+        slug="users"
+        columns={columns}
+        rows={customers}
+      />
       {/* TEST THE API */}
 
       {/* {isLoading ? (
@@ -107,6 +124,4 @@ export const Customers = () => {
       {/* {open && <Add slug="user" columns={columns} setOpen={setOpen} />} */}
     </div>
   );
-}
-
-
+};

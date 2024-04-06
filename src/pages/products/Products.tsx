@@ -39,13 +39,14 @@ const Products = () => {
         setSnackbarMessage(
           `Proudct Deleted!`
         );
-        getAllProducts()
+
       }else{
         setSnackbarMessage(
           `Deletion Failed!`
         );
       }
       setIsLoading(false);
+      getAllProducts()
     });
   }
   const columns: GridColDef[] = [
